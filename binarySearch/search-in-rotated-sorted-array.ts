@@ -17,12 +17,12 @@ function search(nums: number[], target: number): number {
     const mid = left + Math.floor((right - left) / 2);
     if (target === nums[mid]) {
       return mid;
-    } else if (nums[left] <= nums[right]) {
-      if (target < nums[mid]) {
-        right = mid - 1;
-      } else {
-        left = mid + 1;
-      }
+      // } else if (nums[left] <= nums[right]) {
+      //   if (target < nums[mid]) {
+      //     right = mid - 1;
+      //   } else {
+      //     left = mid + 1;
+      //   } we don't need to calculate this because other else if statements will cover this case
     } else if (nums[left] > nums[mid]) {
       if (nums[mid] < target && target <= nums[right]) {
         left = mid + 1;
