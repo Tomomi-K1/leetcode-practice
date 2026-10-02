@@ -1,4 +1,3 @@
-type Key = string;
 type Value = [string, number];
 
 class TimeMap {
@@ -27,26 +26,20 @@ class TimeMap {
    * @return {string}
    */
   get(key: string, timestamp: number): string {
-    const values = this.keyStore.get(key);
-    if (!values) {
-      return "";
-    }
+    const values = this.keyStore.get(key) || [];
+    let res = "";
+    // do binary search but update the res value only when mid value is smaller or equal to the timestamp. If mid value is bigger we won't consider those values after.
     let left = 0;
     let right = values.length - 1;
-    let possLargValueAndTimestamp;
     while (left <= right) {
       const mid = left + Math.floor((right - left) / 2);
-      if (timestamp >= values[mid][1]) {
-        possLargValueAndTimestamp = values[mid];
-      }
-      if (values[mid][1] === timestamp) {
-        return values[mid][0];
-      } else if (values[mid][1] > timestamp) {
-        right = mid - 1;
-      } else {
+      if (values[mid][1] <= timestamp) {
+        res = values[mid][0];
         left = mid + 1;
+      } else {
+        right = mid - 1;
       }
     }
-    return possLargValueAndTimestamp ? possLargValueAndTimestamp[0] : "";
+    return res;
   }
 }
