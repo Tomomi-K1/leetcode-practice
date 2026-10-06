@@ -21,6 +21,7 @@ class Solution {
     let Al = 0;
     let Ar = A.length - 1;
 
+    //while true works but we could use while(Al <=Ar) as well but we have to set Ar as A.length and Aleft will be [Am-1] and Aright will be [Am]
     while (true) {
       const Am = Al + Math.floor((Ar - Al) / 2); // 1 => A[Amid] === 5
       const Bm = half - Am - 2;
@@ -30,7 +31,6 @@ class Solution {
       let Bleft = Bm >= 0 ? B[Bm] : Number.MIN_SAFE_INTEGER;
       let Bright = Bm < B.length - 1 ? B[Bm + 1] : Number.MAX_SAFE_INTEGER;
 
-      console.log(Aright, Aleft, Bleft, Bright);
       if (Aleft <= Bright && Bleft <= Aright) {
         if (totalLength % 2 == 1) {
           return Math.min(Aright, Bright);
