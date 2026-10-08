@@ -4,26 +4,18 @@ class Solution {
    * @return {number}
    */
   lengthOfLongestSubstring(s: string): number {
-    let maxL = 1;
+    let maxL = 0;
     let left = 0;
-    let right = left + 1;
-    const existingS = new Set();
-    while (right < s.length) {
-      if (existingS.size === 0) {
-        existingS.add(s[left]);
+    const charSet = new Set();
+
+    for (let right = 0; right < s.length; right++) {
+      while (charSet.has(s[right])) {
+        charSet.delete(s[left]);
+        left++;
       }
-      if (existingS.has(s[right])) {
-        maxL = Math.max(existingS.size, maxL);
-        left = right;
-        right++;
-        existingS.clear();
-      } else {
-        maxL = Math.max(existingS.size, maxL);
-        existingS.add(s[right]);
-        right++;
-      }
+      charSet.add(s[right]);
+      maxL = Math.max(maxL, right - left + 1);
     }
     return maxL;
   }
 }
-//this solution does not work for the case of "abcabcbb" because it will return 3 instead of 3. This solution is skipping possible strings towards max length of substrings. The correct approach is to use a sliding window technique with a hash map to keep track of the characters and their indices.
