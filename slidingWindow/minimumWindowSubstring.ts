@@ -11,43 +11,44 @@ class Solution {
       return res;
     }
 
-    // {X: 1, Y: 1, Z:1}
-    const tCount = new Map();
-    for (let char of t) {
+    const tCount = new Map(); // {X:1, Y:1, Z:1}
+    for (const char of t) {
       tCount.set(char, (tCount.get(char) || 0) + 1);
     }
 
-    let left = 0;
-    while (left < s.length) {
-      while (left < s.length && !tCount.has(s[left])) {
+    let left = 0; // 3 O
+    let range = [-1, -1]; // [2, 6]
+    let length = Number.MAX_SAFE_INTEGER; // 5
+    const sCount = new Map(); // {Z:0, Y: 1, X:1}
+    let matches = 0; // 2
+    //right = 7
+    //s[right] ='X'
+    for (let right = 0; right < s.length; right++) {
+      sCount.set(s[right], (sCount.get(s[right]) || 0) + 1);
+
+      if (
+        tCount.has(s[right]) &&
+        sCount.get(s[right]) === tCount.get(s[right])
+      ) {
+        matches++;
+      }
+
+      while (matches === tCount.size) {
+        if (length > right - left + 1) {
+          range = [left, right];
+          length = right - left + 1;
+        }
+
+        sCount.set(s[left], sCount.get(s[left]) - 1);
+        if (tCount.has(s[left]) && sCount.get(s[left]) < tCount.get(s[left])) {
+          matches--;
+        }
+
         left++;
       }
-      const sCount = new Map();
-      let matches = 0;
-      for (let right = left; right < s.length; right++) {
-        sCount.set(s[right], (sCount.get(s[right]) || 0) + 1);
-        if (
-          tCount.has(s[right]) &&
-          tCount.get(s[right]) === sCount.get(s[right])
-        ) {
-          matches++;
-        }
-        if (matches === tCount.size) {
-          if (res === "") {
-            res = s.substring(left, right + 1);
-          } else {
-            res =
-              res.length <= s.substring(left, right + 1).length
-                ? res
-                : s.substring(left, right + 1);
-          }
-          break;
-        }
-      }
-      left++;
     }
-    return res;
+    return length === Number.MAX_SAFE_INTEGER
+      ? ""
+      : s.substring(range[0], range[1] + 1);
   }
 }
-
-//this solution didn't work since it was not efficient enough.
